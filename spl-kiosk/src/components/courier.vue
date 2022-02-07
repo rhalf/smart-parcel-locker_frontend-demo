@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col>
-        <div class="headline text-center">Select code type.</div>
+        <div class="title text-center">Select code type.</div>
       </v-col>
 
       <v-col class="text-center">
@@ -50,56 +50,38 @@
 </template>
 
 <script>
-import splApi from "../../api/splCloudApi";
-import dialogBarcode from "../../components/dialogs/barcode";
-import dialogQrcode from "../../components/dialogs/qrcode";
+import splCloudApi from "../api/splCloudApi";
+import dialogBarcode from "./dialogs/barcode";
+import dialogQrcode from "./dialogs/qrcode";
 
 export default {
   name: "Courier",
+  mixins: [splCloudApi],
   components: { dialogBarcode, dialogQrcode },
-  mounted() {
-    //this.$nextTick(() => this.$refs.courierCode.focus());
-    this.courier = null;
-    this.courierCode = null;
-  },
+
   data() {
     return {
       courier: null,
-      courierCode: null,
     };
   },
   methods: {
-    onCourierBarcode(data) {
-      this.courierCode = data;
-      splApi.methods
-        .getCourierByBarcode(data)
-        .then((data) => {
-          this.courier = data.data;
-        })
-        .catch(() => {
-          this.courier = null;
-        });
+    onCourierBarcode(code) {
+      this.getCourierByBarcode(code).then((result) => {
+        if (typeof result.data == "object") {
+          this.courier = result.data;
+          this.$emit("input", result.data);
+        }
+      });
     },
-    onCourierQrcode(data) {
-      this.courierCode = data;
-      splApi.methods
-        .getCourierByQrcode(data)
-        .then((data) => {
-          this.courier = data.data;
-        })
-        .catch(() => {
-          this.courier = null;
-        });
+    onCourierQrcode(code) {
+      this.getCourierByQrcode(code).then((result) => {
+        if (typeof result.data == "object") {
+          this.courier = result.data;
+          this.$emit("input", result.data);
+        }
+      });
     },
   },
-  watch: {
-    courier(item) {
-      if (item) {
-        this.$emit("input", item);
-      } else {
-        this.$emit("input", null);
-      }
-    },
-  },
+ 
 };
 </script>

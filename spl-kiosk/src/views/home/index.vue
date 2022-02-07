@@ -6,7 +6,10 @@
         <v-btn @click="unlockAll()">UnlockAll</v-btn>
         <v-btn @click="getStatus()">Status</v-btn> -->
         <!-- <v-card :ripple="{ class: 'red--text' }"> -->
-        <v-card v-ripple @click="$router.push({ name: 'Deposit' }).catch(() => {})">
+        <v-card
+          v-ripple
+          @click="$router.push({ name: 'Deposit' }).catch(() => {})"
+        >
           <v-card-title>
             <v-icon left extra-large>mdi-package-down</v-icon>
             Deposit</v-card-title
@@ -15,9 +18,11 @@
         </v-card>
       </v-col>
       <v-col>
-        <!-- <v-card :ripple="{ class: 'red--text' }"> -->
-        <v-card v-ripple >
-          <v-card-title >
+        <v-card
+          v-ripple
+          @click="$router.push({ name: 'Withdraw' }).catch(() => {})"
+        >
+          <v-card-title>
             <v-icon left extra-large>mdi-package-up</v-icon>
             Withdraw
           </v-card-title>
@@ -35,25 +40,7 @@ export default {
   name: "Home",
   mixins: [locker],
   data() {
-    return {
-      items: [
-        {
-          text: "Dashboard",
-          disabled: false,
-          href: "/",
-        },
-        {
-          text: "Settings",
-          disabled: false,
-          href: "breadcrumbs_link_1",
-        },
-        {
-          text: "Link 2",
-          disabled: true,
-          href: "breadcrumbs_link_2",
-        },
-      ],
-    };
+    return {};
   },
 };
 </script>

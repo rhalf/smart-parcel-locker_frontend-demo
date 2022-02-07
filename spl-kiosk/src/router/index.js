@@ -21,6 +21,11 @@ const routes = [
     component: () => import('../views/deposit/index.vue')
   },
   {
+    path: '/withdraw',
+    name: 'Withdraw',
+    component: () => import('../views/withdraw/index.vue')
+  },
+  {
     path: '/about',
     name: 'about',
     // route level code-splitting

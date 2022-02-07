@@ -2,7 +2,7 @@
   <div>
     <v-row>
       <v-col>
-        <lockers v-model="locker"></lockers>
+        <lockers @onLocker="onLocker"></lockers>
       </v-col>
     </v-row>
 
@@ -21,26 +21,18 @@ export default {
   name: "locker",
   components: { lockers },
   mounted() {
-    //this.$nextTick(() => this.$refs.lockerCode.focus());
-    this.locker = null;
+
   },
   data() {
     return {
-      locker: null,
+     
     };
   },
   methods: {
-
+    onLocker(locker) {
+      this.$emit('input', locker)
+    }
   },
-  watch: {
-    locker(item) {
-      if (item) {
-        console.log(item);
-        this.$emit("input", item);
-      } else {
-        this.$emit("input", null);
-      }
-    },
-  },
+  
 };
 </script>

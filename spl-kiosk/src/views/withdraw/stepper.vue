@@ -8,64 +8,19 @@
               Parcel
             </v-stepper-step>
             <v-divider></v-divider>
+
             <v-stepper-step :complete="stepState > 2" step="2">
-              Courier
+              Client
             </v-stepper-step>
             <v-divider></v-divider>
+
             <v-stepper-step :complete="stepState > 3" step="3">
-              Locker
-            </v-stepper-step>
-            <v-divider></v-divider>
-            <v-stepper-step :complete="stepState > 4" step="4">
               Done
             </v-stepper-step>
           </v-stepper-header>
 
           <v-stepper-items>
             <v-stepper-content step="1">
-              <v-row>
-                <v-col>
-                  <parcel v-model="parcel"></parcel>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-spacer></v-spacer>
-                <v-col cols="auto">
-                  <v-btn
-                    color="primary "
-                    @click="stepState = 2"
-                    :disabled="parcel == null"
-                    large
-                  >
-                    Continue
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-stepper-content>
-            <v-stepper-content step="2">
-              <v-row>
-                <v-col>
-                  <courier v-model="courier"></courier>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-spacer></v-spacer>
-                <v-col cols="auto">
-                  <v-btn
-                    color="primary "
-                    @click="stepState = 3"
-                    :disabled="courier == null"
-                    large
-                  >
-                    Continue
-                  </v-btn>
-                </v-col>
-                <v-col cols="auto">
-                  <v-btn large @click="stepState = 1">Back</v-btn>
-                </v-col>
-              </v-row>
-            </v-stepper-content>
-            <v-stepper-content step="3">
               <v-row>
                 <v-col>
                   <locker v-model="locker"></locker>
@@ -76,36 +31,53 @@
                 <v-col cols="auto">
                   <v-btn
                     color="primary "
-                    @click="
-                      stepState = 4;
-                      cu48bUnlock(locker.value);
-                    "
+                    @click="stepState = 2; "
                     :disabled="locker == null"
-                    x-large
+                    large
+                  >
+                    Continue
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-stepper-content>
+            <v-stepper-content step="2">
+              <v-row>
+                <v-col>
+                  <client v-model="client"></client>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-spacer></v-spacer>
+                <v-col cols="auto">
+                  <v-btn
+                    color="primary "
+                    @click="stepState = 3; "
+                    :disabled="client == null"
+                    large
                   >
                     Continue
                   </v-btn>
                 </v-col>
                 <v-col cols="auto">
-                  <v-btn large @click="stepState = 2">Back</v-btn>
+                  <v-btn large @click="stepState = 1">Back</v-btn>
                 </v-col>
               </v-row>
             </v-stepper-content>
-            <v-stepper-content step="4">
+         
+            <v-stepper-content step="3">
               <v-row>
                 <v-col>
-                  <commitDeposit
+                  <commitWithdraw
                     :locker="locker"
-                    :parcel="parcel"
-                    :courier="courier"
-                  ></commitDeposit>
+                    :client="client"
+                  ></commitWithdraw>
                 </v-col>
               </v-row>
               <v-row>
                 <v-spacer></v-spacer>
 
                 <v-col cols="auto">
-                  <v-btn large @click="stepState = 3">Back</v-btn>
+                  <v-btn large @click="stepState = 2">Back</v-btn>
                 </v-col>
               </v-row>
             </v-stepper-content>
@@ -118,24 +90,30 @@
 
 <script>
 import splLockerApi from "../../api/splLockerApi";
-import courier from "../../components/courier";
-import parcel from "../../components/parcel";
-import locker from "./locker";
-import commitDeposit from "./commitDeposit";
+import client from "../../components/client";
+import locker from "../../components/locker";
+import commitWithdraw from "./commitWithdraw";
 
 export default {
   name: "Stepper",
   mixins: [splLockerApi],
-  components: { courier, parcel, locker, commitDeposit },
+  components: { client, locker, commitWithdraw },
+  mounted() {
+    //this.$nextTick(() => this.$refs.clientCode.focus());
+    this.stepState = 1;
+    this.client = null;
+    this.locker = null;
+  },
   data() {
     return {
-      courier: null,
-      parcel: null,
+      client: null,
       locker: null,
       stepState: 1,
     };
   },
-  methods: {},
+  methods: {
+   
+  },
   watch: {},
 };
 </script>

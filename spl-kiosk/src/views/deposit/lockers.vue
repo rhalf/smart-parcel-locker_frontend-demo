@@ -64,7 +64,7 @@ export default {
       });
       locker.selected = true;
 
-      this.$emit('input', locker);
+      this.$emit('onLocker', locker);
       this.$forceUpdate();
     },
   },

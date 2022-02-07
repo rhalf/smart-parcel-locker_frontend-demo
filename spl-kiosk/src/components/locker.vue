@@ -1,0 +1,86 @@
+<template>
+  <v-container>
+    <v-row>
+      <v-col>
+        <div class="title text-center">Select code type.</div>
+      </v-col>
+
+      <v-col class="text-center">
+        <dialog-barcode @onBarcode="onLockerBarcode"></dialog-barcode>
+      </v-col>
+      <v-col class="text-center">
+        <dialog-qrcode @onQrcode="onLockerQrcode"></dialog-qrcode>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-divider> </v-divider>
+      </v-col>
+    </v-row>
+    <v-row class="space-around">
+      <v-col class="auto">
+        <div class="title text-right">Name :</div>
+        <div class="title text-right">Barcode :</div>
+
+        <div class="title text-right">Qrcode :</div>
+
+        <div class="title text-right">Size :</div>
+      </v-col>
+      <v-col>
+        <div class="title font-weight-bold" v-if="locker">
+          {{ locker.parcel.name }}
+        </div>
+        <div class="title font-weight-bold" v-if="locker">
+          {{ locker.parcel.barcode }}
+        </div>
+        <div class="title font-weight-bold" v-if="locker">
+          {{ locker.parcel.qrcode }}
+        </div>
+        <div class="title font-weight-bold" v-if="locker">
+          {{ locker.parcel.size.name }}
+        </div>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-divider> </v-divider>
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
+
+<script>
+import splCloudApi from "../api/splCloudApi";
+import dialogBarcode from "./dialogs/barcode";
+import dialogQrcode from "./dialogs/qrcode";
+
+export default {
+  name: "locker",
+  mixins: [splCloudApi],
+  components: { dialogBarcode, dialogQrcode },
+
+  data() {
+    return {
+      locker: null,
+    };
+  },
+  methods: {
+    onLockerBarcode(code) {
+      this.getLockerByParcelBarcode(code).then((result) => {
+        if (typeof result.data == "object") {
+          this.locker = result.data;
+          this.$emit("input", result.data);
+        } 
+      });
+    },
+    onLockerQrcode(code) {
+      this.getLockerByParcelQrcode(code).then((result) => {
+        if (typeof result.data == "object") {
+          this.locker = result.data;
+          this.$emit("input", result.data);
+        }
+      });
+    },
+  },
+};
+</script>

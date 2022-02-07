@@ -51,7 +51,7 @@ export default {
         e.preventDefault();
         this.dialog = false;
         this.$emit("onBarcode", this.code);
-        this.code = "";
+        this.code = null;
       } else if (e.key == "Shift" || e.key == "Ctrl" || e.key == "Alt") {
         return;
       } else {

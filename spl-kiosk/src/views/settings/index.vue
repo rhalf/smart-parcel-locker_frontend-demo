@@ -14,8 +14,11 @@
           <v-tab-item>
             <lockers-0123></lockers-0123>
           </v-tab-item>
-          <v-tab-item> 
-             <lockers-2435></lockers-2435>
+          <v-tab-item>
+            <lockers-2435></lockers-2435>
+          </v-tab-item>
+          <v-tab-item>
+            <transaction></transaction>
           </v-tab-item>
         </v-tabs-items>
       </v-col>
@@ -24,21 +27,27 @@
 </template>
 
 <script>
-
 import splLockerApi from "../../api/splLockerApi";
-import lockers0123 from "../../components/lockers0123";
-import lockers2435 from "../../components/lockers2435";
+import splCloudApi from "../../api/splCloudApi";
+import lockers0123 from "./lockers0123";
+import lockers2435 from "./lockers2435";
+import transaction from "./transaction";
 
 export default {
   name: "Settings",
-  mixins: [splLockerApi],
-  components: { lockers0123, lockers2435 },
+  mixins: [splLockerApi, splCloudApi],
+  components: { lockers0123, lockers2435, transaction },
   data() {
     return {
       interval: null,
       tab: null,
-      tabItems: ["1-24", "25-48"],
+      tabItems: ["1-24", "25-48", "Transactions"],
     };
+  },
+  created() {
+    this.getLockers();
+    this.cu48bStatus();
+    this.getTransactions();
   },
   mounted() {
     this.interval = setInterval(() => {
@@ -46,9 +55,7 @@ export default {
     }, 1000);
   },
 
-  methods: {
-    
-  },
+  methods: {},
   computed: {},
   beforeDestroy() {
     clearInterval(this.interval);

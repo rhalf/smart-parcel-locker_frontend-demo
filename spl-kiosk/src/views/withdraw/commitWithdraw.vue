@@ -10,7 +10,7 @@
     <v-row>
       <v-col>
         <div class="title text-center">
-          Place the parcel inside the locker and close the door!
+          Get the parcel inside the locker and close the door!
         </div>
       </v-col>
     </v-row>
@@ -39,21 +39,18 @@
 import splCloudApi from "../../api/splCloudApi";
 
 export default {
-  name: "CommitDeposit",
+  name: "CommitWithdraw",
   mixins: [splCloudApi],
   components: {},
   props: {
     locker: Object,
-    courier: Object,
-    parcel: {
-      type: [Object, String],
-
-    },
+    client: Object,
   },
 
   data() {
     return {
       transaction: {},
+      newLocker: {},
     };
   },
   methods: {
@@ -62,25 +59,12 @@ export default {
       var doneL = false;
 
       this.transaction.locker = this.locker;
-      this.transaction.locker.parcel = this.parcel;
-      
-      this.transaction.parcel = this.parcel;
-      this.transaction.type = 'deposit';
+      this.transaction.parcel = this.locker.parcel;
+      this.transaction.type = 'withdraw';
       this.transaction.datetime = new Date()
         .toISOString()
         .slice(0, 19)
         .replace("T", " ");
-
-       console.log( this.transaction);
-
-      await this.setLocker(this.transaction.locker)
-        .then((result) => {
-          console.log(result);
-          doneL = true;
-        })
-        .catch((result) => {
-          console.log(result);
-        });
 
       await this.setTransaction(this.transaction)
         .then((result) => {
@@ -91,24 +75,22 @@ export default {
           console.log(result);
         });
 
+      this.newLocker.id = this.locker.id;
+      this.newLocker.value = this.locker.value;
+      this.newLocker.size = this.locker.size;
+      this.newLocker.parcel = null;
+
+      await this.setLocker(this.newLocker)
+        .then((result) => {
+          console.log(result);
+          doneL = true;
+        })
+        .catch((result) => {
+          console.log(result);
+        });
+
       if (doneT && doneL) this.$router.push({ name: "Home" });
     },
   },
-
-  // mounted() {
-  //   this.interval = setInterval(() => {
-  //     if (!this.locker) return;
-  //     let cu48b = this.$store.getters.getCu48b;
-  //     if (cu48b.lockers[this.locker.value])
-  //       if (this.save == false) {
-  //         console.log("record");
-  //         this.save = true;
-  //       }
-  //   }, 1000);
-  // },
-
-  // destroyed() {
-  //   clearInterval(this.interval);
-  // },
 };
 </script>

@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col>
-        <div class="headline text-center">Select code type.</div>
+        <div class="title text-center">Select code type.</div>
       </v-col>
 
       <v-col class="text-center">
@@ -50,56 +50,36 @@
 </template>
 
 <script>
-import splApi from "../../api/splCloudApi";
-import dialogBarcode from "../../components/dialogs/barcode";
-import dialogQrcode from "../../components/dialogs/qrcode";
+import splCloudApi from "../api/splCloudApi";
+import dialogBarcode from "./dialogs/barcode";
+import dialogQrcode from "./dialogs/qrcode";
 
 export default {
   name: "parcel",
+  mixins: [splCloudApi],
   components: { dialogBarcode, dialogQrcode },
-  mounted() {
-    //this.$nextTick(() => this.$refs.parcelCode.focus());
-    this.parcel = null;
-    this.parcelCode = null;
-  },
+
   data() {
     return {
       parcel: null,
-      parcelCode: null,
     };
   },
   methods: {
-    onParcelBarcode(data) {
-      this.parcelCode = data;
-      splApi.methods
-        .getParcelByBarcode(data)
-        .then((data) => {
-          this.parcel = data.data;
-        })
-        .catch(() => {
-          this.parcel = null;
-        });
+    onParcelBarcode(code) {
+      this.getParcelByBarcode(code).then((result) => {
+        if (typeof result.data == "object") {
+          this.parcel = result.data;
+          this.$emit("input", result.data);
+        }
+      });
     },
-    onParcelQrcode(data) {
-      this.parcelCode = data;
-      splApi.methods
-        .getParcelByQrcode(data)
-        .then((data) => {
-          this.parcel = data.data;
-        })
-        .catch(() => {
-          this.parcel = null;
-        });
-    },
-  },
-  watch: {
-    parcel(item) {
-      if (item) {
-        console.log(item)
-        this.$emit("input", item);
-      } else {
-        this.$emit("input", null);
-      }
+    onParcelQrcode(code) {
+      this.getParcelByQrcode(code).then((result) => {
+        if (typeof result.data == "object") {
+          this.parcel = result.data;
+          this.$emit("input", result.data);
+        } 
+      });
     },
   },
 };
