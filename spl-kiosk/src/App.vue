@@ -1,7 +1,7 @@
 <template>
   <v-app>
-    <v-container class="pa-5">
-      <v-row>
+    <v-container>
+      <v-row  class="pa-5">
         <v-col cols="auto">
           <div class="title">{{ $route.name }}</div>
         </v-col>

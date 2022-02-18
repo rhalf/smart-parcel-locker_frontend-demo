@@ -16,14 +16,23 @@
     </v-row>
     <v-row>
       <v-col>
-        <div class="title text-center">
-          Hit the Done button after closing the door.
+        <div class="title text-center">Transaction done. Thank you</div>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <div class="display-1 text-center">
+          {{ count }}
         </div>
       </v-col>
     </v-row>
     <v-row>
       <v-col class="text-center">
-        <v-btn class="primary" @click="process()">Done</v-btn>
+        <v-btn
+          class="primary"
+          @click="$router.push({ name: 'Home' }).catch(() => {})"
+          >Done</v-btn
+        >
       </v-col>
     </v-row>
     <v-row> </v-row>
@@ -45,22 +54,21 @@ export default {
   props: {
     locker: Object,
     client: Object,
+    start: Boolean,
   },
 
   data() {
     return {
       transaction: {},
       newLocker: {},
+      count: 10,
     };
   },
   methods: {
     async process() {
-      var doneT = false;
-      var doneL = false;
-
       this.transaction.locker = this.locker;
       this.transaction.parcel = this.locker.parcel;
-      this.transaction.type = 'withdraw';
+      this.transaction.type = "withdraw";
       this.transaction.datetime = new Date()
         .toISOString()
         .slice(0, 19)
@@ -69,28 +77,40 @@ export default {
       await this.setTransaction(this.transaction)
         .then((result) => {
           console.log(result);
-          doneT = true;
         })
         .catch((result) => {
           console.log(result);
         });
 
-      this.newLocker.id = this.locker.id;
-      this.newLocker.value = this.locker.value;
-      this.newLocker.size = this.locker.size;
+      this.newLocker = {
+        ...this.locker
+      };
       this.newLocker.parcel = null;
 
       await this.setLocker(this.newLocker)
         .then((result) => {
           console.log(result);
-          doneL = true;
         })
         .catch((result) => {
           console.log(result);
         });
-
-      if (doneT && doneL) this.$router.push({ name: "Home" });
     },
+  },
+  watch: {
+    start(value) {
+      if (value) this.process();
+    },
+  },
+  mounted() {
+    this.interval = setInterval(() => {
+      if (!this.start) return;
+      if (this.count) this.count--;
+      if (!this.count) this.$router.push({ name: "Home" });
+    }, 1000);
+  },
+
+  destroyed() {
+    clearInterval(this.interval);
   },
 };
 </script>

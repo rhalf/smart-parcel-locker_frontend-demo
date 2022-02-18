@@ -16,8 +16,13 @@
     </v-row>
     <v-row>
       <v-col>
-        <div class="title text-center">
-          Hit the Done button after closing the door.
+        <div class="title text-center">Transaction done. Thank you</div>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <div class="display-1 text-center">
+          {{ count }}
         </div>
       </v-col>
     </v-row>
@@ -45,38 +50,35 @@ export default {
   props: {
     locker: Object,
     courier: Object,
+    start: Boolean,
     parcel: {
       type: [Object, String],
-
     },
   },
 
   data() {
     return {
       transaction: {},
+      count: 10,
     };
   },
   methods: {
     async process() {
-      var doneT = false;
-      var doneL = false;
-
       this.transaction.locker = this.locker;
       this.transaction.locker.parcel = this.parcel;
-      
+
       this.transaction.parcel = this.parcel;
-      this.transaction.type = 'deposit';
+      this.transaction.type = "deposit";
       this.transaction.datetime = new Date()
         .toISOString()
         .slice(0, 19)
         .replace("T", " ");
 
-       console.log( this.transaction);
+      console.log(this.transaction);
 
       await this.setLocker(this.transaction.locker)
         .then((result) => {
           console.log(result);
-          doneL = true;
         })
         .catch((result) => {
           console.log(result);
@@ -85,30 +87,27 @@ export default {
       await this.setTransaction(this.transaction)
         .then((result) => {
           console.log(result);
-          doneT = true;
         })
         .catch((result) => {
           console.log(result);
         });
-
-      if (doneT && doneL) this.$router.push({ name: "Home" });
     },
   },
+  watch: {
+    start(value) {
+      if (value) this.process();
+    },
+  },
+  mounted() {
+    this.interval = setInterval(() => {
+      if (!this.start) return;
+      if (this.count) this.count--;
+      if (!this.count) if (!this.count) this.$router.push({ name: "Home" });
+    }, 1000);
+  },
 
-  // mounted() {
-  //   this.interval = setInterval(() => {
-  //     if (!this.locker) return;
-  //     let cu48b = this.$store.getters.getCu48b;
-  //     if (cu48b.lockers[this.locker.value])
-  //       if (this.save == false) {
-  //         console.log("record");
-  //         this.save = true;
-  //       }
-  //   }, 1000);
-  // },
-
-  // destroyed() {
-  //   clearInterval(this.interval);
-  // },
+  destroyed() {
+    clearInterval(this.interval);
+  },
 };
 </script>

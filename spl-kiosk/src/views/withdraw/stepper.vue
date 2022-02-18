@@ -3,7 +3,7 @@
     <v-row>
       <v-col>
         <v-stepper v-model="stepState" alt-labels flat>
-          <v-stepper-header>
+          <v-stepper-header class="elevation-0">
             <v-stepper-step :complete="stepState > 1" step="1">
               Parcel
             </v-stepper-step>
@@ -51,7 +51,7 @@
                 <v-col cols="auto">
                   <v-btn
                     color="primary "
-                    @click="stepState = 3; "
+                    @click="stepState = 3; cu48bUnlock(locker.value);"
                     :disabled="client == null"
                     large
                   >
@@ -59,26 +59,26 @@
                   </v-btn>
                 </v-col>
                 <v-col cols="auto">
-                  <v-btn large @click="stepState = 1">Back</v-btn>
+                  <v-btn large @click="stepState = 1" outlined>Back</v-btn>
                 </v-col>
               </v-row>
-            </v-stepper-content>
-         
+            </v-stepper-content>     
             <v-stepper-content step="3">
               <v-row>
                 <v-col>
                   <commitWithdraw
                     :locker="locker"
                     :client="client"
+                    :start ="stepState == 3"
                   ></commitWithdraw>
                 </v-col>
               </v-row>
               <v-row>
                 <v-spacer></v-spacer>
 
-                <v-col cols="auto">
-                  <v-btn large @click="stepState = 2">Back</v-btn>
-                </v-col>
+                <!-- <v-col cols="auto">
+                  <v-btn large @click="stepState = 2" outlined>Back</v-btn>
+                </v-col> -->
               </v-row>
             </v-stepper-content>
           </v-stepper-items>

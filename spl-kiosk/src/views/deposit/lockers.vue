@@ -3,15 +3,13 @@
     <v-row>
       <v-col v-for="(locker, index) in lockers0123" :key="index" cols="2">
         <v-card
+          outlined
           :elevation="0"
           v-if="getCu48b()"
           :class="locker.selected ? 'primary' : ''"
           :dark="locker.selected"
-          
           :color="locker.parcel ? 'green lighten-1' : 'grey lighten-2'"
-          @click="
-            selected(locker);
-          "
+          @click="selected(locker)"
           rounded
           :disabled="locker.parcel != null"
         >
@@ -24,7 +22,7 @@
               </v-col>
               <v-col>
                 <div class="subtitle-1 font-weight-bold">
-                  {{ index + 1 | pad(2) }}
+                  {{ (index + 1) | pad(2) }}
                 </div>
               </v-col>
             </v-row>
@@ -64,7 +62,7 @@ export default {
       });
       locker.selected = true;
 
-      this.$emit('onLocker', locker);
+      this.$emit("onLocker", locker);
       this.$forceUpdate();
     },
   },

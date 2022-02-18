@@ -2,14 +2,23 @@
   <v-container>
     <v-row>
       <v-col>
-        <!-- <v-btn @click="unlock(0)">Unlock</v-btn>
-        <v-btn @click="unlockAll()">UnlockAll</v-btn>
-        <v-btn @click="getStatus()">Status</v-btn> -->
-        <!-- <v-card :ripple="{ class: 'red--text' }"> -->
         <v-card
           v-ripple
           @click="$router.push({ name: 'Deposit' }).catch(() => {})"
         >
+          <v-img
+            aspect-ratio="4/3"
+            :src="require('../../assets/cards/deposit.jpg')"
+            height="300"
+          ></v-img>
+          <v-card-text style="position: absolute">
+            <v-fab-transition>
+              <v-btn color="brown" dark absolute top right fab large>
+                <v-icon large>mdi-package-variant-closed</v-icon>
+              </v-btn>
+            </v-fab-transition>
+          </v-card-text>
+
           <v-card-title>
             <v-icon left extra-large>mdi-package-down</v-icon>
             Deposit</v-card-title
@@ -22,6 +31,20 @@
           v-ripple
           @click="$router.push({ name: 'Withdraw' }).catch(() => {})"
         >
+          <v-img
+            aspect-ratio="4/3"
+            :src="require('../../assets/cards/withdraw.jpg')"
+            height="300"
+          ></v-img>
+
+          <v-card-text style="position: absolute">
+            <v-fab-transition>
+              <v-btn color="blue" dark absolute top right fab large>
+                <v-icon large>mdi-package-variant</v-icon>
+              </v-btn>
+            </v-fab-transition>
+          </v-card-text>
+
           <v-card-title>
             <v-icon left extra-large>mdi-package-up</v-icon>
             Withdraw
