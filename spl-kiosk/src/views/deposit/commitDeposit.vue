@@ -28,7 +28,7 @@
     </v-row>
     <v-row>
       <v-col class="text-center">
-        <v-btn class="primary" @click="process()">Done</v-btn>
+        <v-btn class="primary" @click="$router.push({ name: 'Home' }).catch(() => {})">Done</v-btn>
       </v-col>
     </v-row>
     <v-row> </v-row>

@@ -66,6 +66,7 @@ export default {
   },
   methods: {
     async process() {
+      
       this.transaction.locker = this.locker;
       this.transaction.parcel = this.locker.parcel;
       this.transaction.type = "withdraw";

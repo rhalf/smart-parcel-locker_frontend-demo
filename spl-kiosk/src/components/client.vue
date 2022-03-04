@@ -9,7 +9,7 @@
         <dialog-barcode @onBarcode="onClientBarcode"></dialog-barcode>
       </v-col>
       <v-col class="text-center">
-        <dialog-qrcode @onBarcode="onClientQrcode"></dialog-qrcode>
+        <dialog-qrcode @onQrcode="onClientQrcode"></dialog-qrcode>
       </v-col>
     </v-row>
     <v-row>
@@ -58,28 +58,33 @@ export default {
   name: "Client",
   mixins: [splCloudApi],
   components: { dialogBarcode, dialogQrcode },
-
+ props:{
+      locker: Object
+    },
   data() {
+   
     return {
       client: null,
     };
   },
   methods: {
-    onClientBarcode(code) {
-      this.getClientByBarcode(code).then((result) => {
-        if (typeof result.data == "object") {
-          this.client = result.data;
-          this.$emit("input", result.data);
-        } 
-      });
+    onClientBarcode(code) { 
+        if (this.locker != null && code == this.locker.parcel.client.barcode) {
+          this.client = this.locker.parcel.client;
+          this.$emit("input", this.client);
+          this.$emit("onValidClient", true);
+        } else {
+           this.$emit("onValidClient", false);
+        }
     },
     onClientQrcode(code) {
-      this.getClientByQrcode(code).then((result) => {
-        if (typeof result.data == "object") {
-          this.client = result.data;
-          this.$emit("input", result.data);
+       if (this.locker != null && code == this.locker.parcel.client.qrcode) {
+          this.client = this.locker.parcel.client;
+          this.$emit("input", this.client);
+          this.$emit("onValidClient", true);
+        } else {
+           this.$emit("onValidClient", false);
         }
-      });
     },
   },
 };

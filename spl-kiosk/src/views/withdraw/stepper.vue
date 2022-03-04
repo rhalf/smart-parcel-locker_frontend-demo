@@ -43,7 +43,7 @@
             <v-stepper-content step="2">
               <v-row>
                 <v-col>
-                  <client v-model="client"></client>
+                  <client v-model="client" :locker="locker" @onValidClient="onValidClientHandler"></client>
                 </v-col>
               </v-row>
               <v-row>
@@ -52,7 +52,7 @@
                   <v-btn
                     color="primary "
                     @click="stepState = 3; cu48bUnlock(locker.value);"
-                    :disabled="client == null"
+                    :disabled="!isValidClient"
                     large
                   >
                     Continue
@@ -102,17 +102,21 @@ export default {
     //this.$nextTick(() => this.$refs.clientCode.focus());
     this.stepState = 1;
     this.client = null;
+   
     this.locker = null;
   },
   data() {
     return {
       client: null,
       locker: null,
+      isValidClient: false,
       stepState: 1,
     };
   },
   methods: {
-   
+    onValidClientHandler(status) {
+      this.isValidClient = status;
+    }
   },
   watch: {},
 };
